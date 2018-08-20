@@ -10,12 +10,16 @@ module.exports = (app, path) => {
       onerror: logerror.bind(this)
     });
 
-    // rerequire app
-    delete require.cache[path];
+    Object.keys(require.cache).forEach(function(key) {
+      delete require.cache[key];
+    });
     delete this._router;
+
     this.lazyrouter();
+
     var initApp = require(path);
     initApp(this);
+
     router = this._router;
 
     // no routes
