@@ -1,6 +1,12 @@
 var finalhandler = require('finalhandler');
 
-module.exports = (app, path) => {
+module.exports = (app, path, enable=true) => {
+  if (!enable) {
+    var initApp = require(path);
+    initApp(app);
+    return;
+  }
+
   app.handle = function handle(req, res, callback) {
     var router = this._router;
 

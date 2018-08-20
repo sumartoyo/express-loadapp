@@ -37,22 +37,17 @@ The difference between this library and other auto-reload library is that this l
 ## Usage
 
 ```js
-loadapp(expressApp, fullPathToFile);
+loadapp(expressApp, fullPathToFile, enableAutoReload=true);
 ```
 
 - `expressApp` is the thing you create from calling `express()`.
 - `fullPathToFile` is the "main" file to be autoreloaded. Writing full path as `/home/myname/myproject/myfile.js` is super dumb so it is recommended to write it as `require.resolve('./myfile')`.
 - The "main" file must exports a function that has one parameter which is `expressApp`. Use it to write middlewares and routes and everything. Read [example/app.js](/example/app.js) for an example.
-
-Note that Express LoadApp is intended for development uses only. It re-require the "main" code which practically load the whole app and it isn't wise to do it in every request in production environment. You can do something like this (can be seen in [example/index.js](/example/index.js)):
+- `enableAutoReload` should be false in production environment. This library re-require the "main" code which practically load the whole app and it isn't wise to do it in every request when in production. You can do something like this (can be seen in [example/index.js](/example/index.js)):
 
 ```js
 const app = express();
-if (app.get('env') !== 'production') {
-  loadapp(app, require.resolve('./app'));
-} else {
-  require('./app')(app);
-}
+loadapp(app, require.resolve('./app'), app.get('env') !== 'production');
 ```
 
 ## Installation

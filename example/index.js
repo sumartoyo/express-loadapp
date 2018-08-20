@@ -3,11 +3,7 @@ const loadapp = require('../../express-loadapp');
 
 const app = express();
 
-if (app.get('env') !== 'production') {
-  loadapp(app, require.resolve('./app'));
-} else {
-  require('./app')(app);
-}
+loadapp(app, require.resolve('./app'), app.get('env') !== 'production');
 
 const PORT = 7000;
 app.listen(PORT, () => console.log(`listening on port ${PORT}`));
